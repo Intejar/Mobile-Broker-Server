@@ -171,6 +171,13 @@ async function run() {
             const result = await usersCollection.updateOne(filter, updatedDoc, options)
             res.send(result)
         })
+        app.get('/users/varify/:email', async(req, res)=>{
+            const email = req.params.email;
+            const query = {email}
+            const user = await usersCollection.findOne(query);
+            console.log(user)
+            res.send({isVarified: user?.userStatus === 'varified'})
+        })
         app.put('/users/varify/:id', async(req, res)=>{
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
