@@ -40,6 +40,7 @@ async function run() {
         const productsCollection = client.db('MobileBroker').collection('products')
         const bookingsCollection = client.db('MobileBroker').collection('bookings')
         const wishListCollection = client.db('MobileBroker').collection('wishList')
+        const advertisedCollection = client.db('MobileBroker').collection('advertise')
 
         app.get('/users', async (req, res) => {
             let query = {};
@@ -87,18 +88,16 @@ async function run() {
         })
         app.patch('/products/:id', async (req, res) => {
             const id = req.params.id;
-            const edited = req.body.editedInfo
+            const edited = req.body.editedData
             console.log(edited)
             const query = { _id: ObjectId(id) };
             const updatedDoc = {
                 $set: {
-                    productName: edited.productName,
-                    resalePrice : edited.resalePrice,
-                    description : edited.description
+                    description : edited
                 }
             }
             const result = await productsCollection.updateOne(query, updatedDoc);
-            /* res.send(result) */
+            res.send(result)
             console.log(result)
         })
         app.delete('/products/:id', async (req, res) => {
@@ -188,6 +187,20 @@ async function run() {
                 }
             }
             const result = await usersCollection.updateOne(filter, updatedDoc, options)
+            res.send(result)
+        })
+        app.get('/advertise', async (req, res) => {
+            let query = {};
+            if (req.query.productId) {
+                query = { productId: req.query.productId };
+            }
+            const result = await advertisedCollection.find(query).toArray();
+            res.send(result)
+        })
+        app.post('/advertise', async(req,res)=>{
+            const wishList = req.body;
+            const result = await advertisedCollection.insertOne(wishList)
+            console.log(result)
             res.send(result)
         })
 
