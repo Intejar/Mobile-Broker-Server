@@ -93,9 +93,12 @@ async function run() {
                 res.send(result)
             }
             if (req.query.category) {
-                query = { category: req.query.category };
-                const product = await productsCollection.find(query).toArray();
-                if(product[0].status === 'unsold'){
+                // query = { category: req.query.category };
+                const filter = {category:req.query.category , status: 'unsold'}
+                const product = await productsCollection.find(filter).toArray();
+                // const filter = { status : 'unsold' };
+                // const getProduct = await product.find(filter).toArray
+                if(product.length > 0){
                     res.send(product)
                 }
                 else{
@@ -275,6 +278,12 @@ async function run() {
             const wishList = req.body;
             const result = await advertisedCollection.insertOne(wishList)
             console.log(result)
+            res.send(result)
+        })
+        app.delete('/advertise/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await advertisedCollection.deleteOne(query)
             res.send(result)
         })
 
