@@ -101,6 +101,12 @@ async function run() {
             const result = await usersCollection.insertOne(user)
             res.send(result)
         })
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: ObjectId(id) }
+            const result = await usersCollection.deleteOne(query)
+            res.send(result)
+        })
         app.get('/products', async (req, res) => {
             if (req.query.email) {
                 query = { email: req.query.email };
