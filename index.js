@@ -179,12 +179,12 @@ async function run() {
             res.send(result)
         })
 
-        app.get('/bookings',verifyJWT, async (req, res) => {
-            const email = req.query.customerEmail;
-            const decodedEmail = req.decoded.email
-            if (email !== decodedEmail) {
-                return res.status(403).send({ message: 'forbidden access' })
-            }
+        app.get('/bookings',async (req, res) => {
+            // const email = req.query.customerEmail;
+            // const decodedEmail = req.decoded.email
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' })
+            // }
             let query = {};
             if (req.query.customerEmail) {
                 query = { customerEmail: req.query.customerEmail };
